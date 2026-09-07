@@ -9,6 +9,7 @@
  */
 
 import puppeteer from 'puppeteer';
+import { PDFDocument } from 'pdf-lib';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -41,7 +42,14 @@ const bodyText = html
   .replace(/&[a-z]+;/gi, ' ');
 const words = bodyText.split(/\s+/).filter(Boolean).length;
 
-// Page count is verified separately (see scripts/pdf-pages.py) to avoid adding
-// another JS dependency just to read a page count.
+const pdf = await PDFDocument.load(await readFile(out));
+const pages = pdf.getPageCount();
+
 console.log(`wrote ${out}`);
+console.log(`pages: ${pages}`);
 console.log(`approx words in document: ${words}`);
+if (pages !== 1) {
+  console.error(`✗ expected exactly 1 page, generated ${pages}`);
+  process.exit(1);
+}
+console.log('✓ fits one A4 page');

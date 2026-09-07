@@ -134,6 +134,12 @@ instant value if the library ever fails to load.
   contextual memory to fast-weight / linear-attention views of association, with
   a special case where state accumulates additively per demonstration. Its role
   here is smaller than BDH's, and we say so rather than inflating it.
+- **Gated DeltaNet** ([arXiv:2412.06464](https://arxiv.org/abs/2412.06464),
+  ICLR 2025) is an independent, recent comparator in the same fixed-state
+  fast-weight lineage. It replaces purely additive writes with a gated delta
+  rule, directly addressing the interference/capacity problem this artifact
+  exposes and showing that learned recurrent matrix memory remains an active
+  architectural direction beyond Pathway.
 - **Not claimed:** we did **not** run any BDH or BDH-CQ checkpoint. Every number
   is from this toy substrate with *random* keys. BDH *learns* its keys, so
   learned sparse codes are closer to orthogonal and store more than random ones
@@ -171,24 +177,33 @@ npm install && npm run pdf
 ```
 
 The artifact itself has **no runtime dependencies** — `index.html` loads only
-local files (`src/*` and the vendored `vendor/motion.js`). The two packages in
-`devDependencies` are tooling only: `jsdom` for the smoke test and `puppeteer` to
-render the summary PDF. Neither is needed to view or grade the artifact. Node ≥
-18 runs the verifier via native ES modules.
+local files (`src/*` and the vendored `vendor/motion.js`). The packages in
+`devDependencies` are tooling only: `jsdom` runs the smoke test, `puppeteer`
+renders the summary PDF, and `pdf-lib` verifies its page count. None is needed
+to view or grade the artifact. Node ≥ 18 runs the verifier via native ES modules.
 
 ## Primary sources (2022–2026)
 
-1. Kosowski et al., *The Dragon Hatchling: The Missing Link between the
-   Transformer and Models of the Brain*, arXiv:2509.26507 (2025). — used for the
-   synaptic-memory reformulation of attention and the sparsity/non-negativity
-   regime.
-2. Pathway, *BDH-CQ: In-Context Learning with Recurrent Latent Reasoning*,
-   arXiv:2608.09888 (2026). — fast-weight/linear-attention view of contextual
-   association; additive per-demonstration state.
-3. Katharopoulos et al., *Transformers are RNNs: Fast Autoregressive
-   Transformers with Linear Attention*, ICML 2020 / arXiv:2006.16236. — the
-   `S = Σ kvᵀ` reassociation this artifact is built on. *(referenced in
-   ONE_PAGE_SUMMARY with the two above as the recent, active line of work.)*
+The first three entries satisfy the track's requirement for at least three
+recent primary papers. The fourth is retained only as foundational background.
+
+1. Kosowski et al., [*The Dragon Hatchling: The Missing Link between the
+   Transformer and Models of the Brain*](https://arxiv.org/abs/2509.26507),
+   arXiv:2509.26507 (2025). — synaptic-memory reformulation of attention and the
+   reported sparsity/non-negativity regime.
+2. Pathway, [*BDH-CQ: In-Context Learning with Recurrent Latent
+   Reasoning*](https://arxiv.org/abs/2608.09888), arXiv:2608.09888 (2026). —
+   fast-weight/linear-attention view of contextual association and additive
+   per-demonstration state.
+3. Yang, Kautz, and Hatamizadeh, [*Gated Delta Networks: Improving Mamba2 with
+   Delta Rule*](https://arxiv.org/abs/2412.06464), arXiv:2412.06464 (2024;
+   ICLR 2025). — a recent independent fixed-state fast-weight architecture that
+   uses gated delta-rule writes to reduce interference and improve retrieval.
+
+**Foundational background (outside the required date window):** Katharopoulos et
+al., [*Transformers are RNNs: Fast Autoregressive Transformers with Linear
+Attention*](https://arxiv.org/abs/2006.16236), ICML 2020 / arXiv:2006.16236 —
+the `S = Σ kvᵀ` reassociation implemented by this artifact.
 
 ## AI-assistance, code, data, and license disclosure
 

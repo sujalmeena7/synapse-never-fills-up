@@ -171,7 +171,9 @@
             <strong>BDH-CQ</strong> [2] is a later family member for in-context reasoning; it relates
             its contextual memory to the same fast-weight / linear-attention view of association, with
             a special case where state accumulates additively per demonstration. BDH's role here is
-            central; BDH-CQ's is a supporting reference, and we do not inflate it.
+            central; BDH-CQ's is supporting evidence. <strong>Gated DeltaNet</strong> [3]
+            independently shows this fixed-state fast-weight direction is active beyond Pathway: its
+            gated delta-rule writes target the same interference/capacity pressure our artifact exposes.
           </p>
         </section>
 
@@ -227,11 +229,11 @@
                 <td>strong recall, costly at length</td>
               </tr>
               <tr>
-                <td>Linear attention / fast weights [3]</td>
+                <td>Gated DeltaNet [3]</td>
                 <td class="fixed">fixed</td>
-                <td>crosstalk-limited</td>
+                <td>gated delta-rule writes</td>
                 <td>medium</td>
-                <td>the substrate our artifact builds</td>
+                <td>recent independent fast-weight system</td>
               </tr>
               <tr>
                 <td>State-space models (Mamba)</td>
@@ -253,13 +255,14 @@
 
         <footer>
           <p>
-            <strong>Primary sources.</strong>
-            [1] Kosowski et al., <em>The Dragon Hatchling: The Missing Link between the Transformer and
-            Models of the Brain</em>, arXiv:2509.26507 (2025).
+            <strong>Primary sources (2022–2026).</strong>
+            [1] Kosowski et al., <em>The Dragon Hatchling</em>, arXiv:2509.26507 (2025).
             [2] Pathway, <em>BDH-CQ: In-Context Learning with Recurrent Latent Reasoning</em>,
             arXiv:2608.09888 (2026).
-            [3] Katharopoulos et al., <em>Transformers are RNNs: Fast Autoregressive Transformers with
-            Linear Attention</em>, arXiv:2006.16236 (2020).
+            [3] Yang, Kautz, and Hatamizadeh, <em>Gated Delta Networks: Improving Mamba2
+            with Delta Rule</em>, arXiv:2412.06464 (2024; ICLR 2025).
+            <strong>Foundational background.</strong> [4] Katharopoulos et al.,
+            <em>Transformers are RNNs</em>, arXiv:2006.16236 (2020).
           </p>
           <p>
             AI assistance was used for drafting; every sentence, number, and citation is defensible and

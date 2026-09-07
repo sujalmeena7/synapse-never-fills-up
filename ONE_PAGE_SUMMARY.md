@@ -42,14 +42,16 @@ sparsity is what keeps that linear growth survivable. **BDH-CQ** [2] is a later
 family member for in-context reasoning; it relates its contextual memory to the
 same fast-weight/linear-attention view, with a special case where state
 accumulates additively per demonstration. BDH's role here is central; BDH-CQ's
-is a supporting reference, and we do not inflate it.
+is a supporting reference. **Gated DeltaNet** [3] independently shows this
+fixed-state fast-weight direction is active beyond Pathway: its gated delta-rule
+writes target the same interference/capacity pressure our artifact exposes.
 
 ## Comparison to the landscape
 
 | Approach | State vs length | Interference | Interpretability | Note |
 |---|---|---|---|---|
 | Softmax Transformer (KV cache) | grows linearly | none (exact recall) | low | strong recall, costly at length |
-| Linear attention / fast weights [3] | **fixed** | crosstalk-limited | medium | the substrate here |
+| Gated DeltaNet [3] | **fixed** | gated delta-rule writes | medium | recent independent fast-weight system |
 | State-space models (Mamba) | fixed | selective decay | medium | gated, not Hebbian; BDH is not this |
 | **BDH / BDH-CQ** [1,2] | **fixed**, synaptic | sparsity-mitigated | high (monosemantic synapses reported) | reasoning + memory unified |
 
@@ -80,6 +82,6 @@ substrate is deliberately pessimistic.
 
 ---
 
-**Primary sources.** [1] Kosowski et al., *The Dragon Hatchling*, arXiv:2509.26507 (2025). [2] Pathway, *BDH-CQ: In-Context Learning with Recurrent Latent Reasoning*, arXiv:2608.09888 (2026). [3] Katharopoulos et al., *Transformers are RNNs*, arXiv:2006.16236 (2020).
+**Primary sources (2022–2026).** [1] Kosowski et al., *The Dragon Hatchling*, arXiv:2509.26507 (2025). [2] Pathway, *BDH-CQ: In-Context Learning with Recurrent Latent Reasoning*, arXiv:2608.09888 (2026). [3] Yang, Kautz, and Hatamizadeh, *Gated Delta Networks: Improving Mamba2 with Delta Rule*, arXiv:2412.06464 (2024; ICLR 2025). **Foundational background:** [4] Katharopoulos et al., *Transformers are RNNs*, arXiv:2006.16236 (2020).
 
 *Word count target 500–950. AI assistance used for drafting; every sentence, number, and citation is defensible and reproducible via the linked verifier.*
