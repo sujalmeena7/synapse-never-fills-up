@@ -10,12 +10,14 @@
     "smoke": "node scripts/smoke.mjs",
     "explore": "node scripts/explore-sparsity.mjs",
     "pdf": "node scripts/make-summary-pdf.mjs",
+    "defence-pdf": "node scripts/make-defence-pdf.mjs",
     "serve": "python -m http.server 8123",
     "check": "npm run verify && npm run smoke"
   },
-  "comment": "The ARTIFACT ITSELF HAS NO RUNTIME DEPENDENCIES. index.html loads only local files (src/*, vendor/motion.js). The packages below are development-only: jsdom powers the DOM smoke test, puppeteer renders the one-page summary, and pdf-lib verifies its page count. None is required to view or grade the artifact.",
+  "comment": "The ARTIFACT ITSELF HAS NO RUNTIME DEPENDENCIES. index.html loads only local files (src/*, vendor/motion.js). The packages below are development-only: jsdom powers the DOM smoke test, puppeteer renders PDFs, pdf-lib verifies page counts, and markdown-it renders the defence guide. None is required to view or grade the artifact.",
   "devDependencies": {
     "jsdom": "30.0.1",
+    "markdown-it": "15.0.1",
     "pdf-lib": "1.17.1",
     "puppeteer": "25.10.0"
   }

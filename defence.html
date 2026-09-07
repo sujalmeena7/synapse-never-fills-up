@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataForge 2026 — Final Presentation Defence</title>
+  <style>
+  :root {
+    --ink: #172033;
+    --dim: #526079;
+    --muted: #75819a;
+    --line: #d9e0ec;
+    --paper: #ffffff;
+    --soft: #f3f6fb;
+    --blue: #315fda;
+    --purple: #714ed6;
+    --green: #168b67;
+    --red: #c34356;
+    --amber: #9a6500;
+    --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    --sans: Inter, "Segoe UI", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  body {
+    margin: 0;
+    background: #e9edf4;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 9.35pt;
+    line-height: 1.43;
+  }
+  .screen-note {
+    max-width: 210mm;
+    margin: 10mm auto -2mm;
+    padding: 10px 14px;
+    border: 1px solid #a9bff5;
+    border-radius: 8px;
+    background: #edf3ff;
+    color: #274998;
+    font-size: 9pt;
+  }
+  .document {
+    width: 210mm;
+    margin: 8mm auto 16mm;
+    padding: 13mm;
+    background: var(--paper);
+    box-shadow: 0 12px 45px rgba(20, 31, 55, .18);
+  }
+  .cover {
+    min-height: 244mm;
+    page-break-after: always;
+    break-after: page;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: 16mm 12mm;
+    border: 1px solid var(--line);
+    border-radius: 6mm;
+    background:
+      radial-gradient(circle at 85% 10%, rgba(113,78,214,.16), transparent 32%),
+      radial-gradient(circle at 12% 90%, rgba(49,95,218,.14), transparent 34%),
+      linear-gradient(145deg, #fbfcff, #f3f6ff);
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4mm;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+  }
+  .eyebrow {
+    margin: 0 0 7mm;
+    color: var(--blue);
+    font-family: var(--mono);
+    font-size: 7.6pt;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .cover h1 {
+    margin: 0;
+    max-width: 160mm;
+    font-size: 31pt;
+    line-height: 1.04;
+    letter-spacing: -.035em;
+  }
+  .cover .subtitle {
+    margin: 4mm 0 0;
+    color: var(--purple);
+    font-size: 15pt;
+    font-weight: 700;
+  }
+  .claim {
+    margin: 12mm 0 8mm;
+    max-width: 155mm;
+    padding: 5mm 6mm;
+    border-left: 3px solid var(--blue);
+    border-radius: 0 3mm 3mm 0;
+    background: rgba(255,255,255,.78);
+    box-shadow: 0 5px 20px rgba(35, 52, 95, .08);
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+    max-width: 155mm;
+    margin-top: 3mm;
+  }
+  .meta {
+    padding: 3.5mm 4mm;
+    border: 1px solid var(--line);
+    border-radius: 2.5mm;
+    background: rgba(255,255,255,.68);
+  }
+  .meta b {
+    display: block;
+    margin-bottom: .8mm;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 7pt;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .cover .rule {
+    margin-top: 10mm;
+    color: var(--dim);
+    font-size: 9pt;
+  }
+  .article { padding: 0 2mm; }
+  h2 {
+    margin: 7mm 0 3mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1.5px solid var(--line);
+    color: #233256;
+    font-size: 16pt;
+    line-height: 1.16;
+    letter-spacing: -.015em;
+    break-after: avoid;
+  }
+  h2:first-child { margin-top: 0; }
+  h2.major-break {
+    break-before: page;
+    page-break-before: always;
+    margin-top: 0;
+  }
+  h3 {
+    margin: 4mm 0 1.5mm;
+    color: var(--blue);
+    font-size: 11.4pt;
+    line-height: 1.25;
+    break-after: avoid;
+  }
+  h4 { margin: 3mm 0 1mm; font-size: 10pt; break-after: avoid; }
+  p { margin: 0 0 2.3mm; orphans: 3; widows: 3; }
+  strong { font-weight: 700; color: #10182b; }
+  em { color: #374565; }
+  a { color: var(--blue); text-decoration: none; }
+  blockquote {
+    margin: 3mm 0 4mm;
+    padding: 3mm 4mm;
+    border-left: 3px solid var(--blue);
+    background: #eef3ff;
+    color: #24375f;
+    break-inside: avoid;
+  }
+  blockquote p { margin: 0; }
+  code {
+    padding: .2mm .8mm;
+    border-radius: 1mm;
+    background: #eef1f6;
+    color: #284b9c;
+    font-family: var(--mono);
+    font-size: 8.2pt;
+  }
+  pre {
+    margin: 2.5mm 0 4mm;
+    padding: 3mm 3.5mm;
+    border: 1px solid #2f3d5b;
+    border-radius: 2.5mm;
+    background: #141c2c;
+    color: #e8eefc;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+  pre code { padding: 0; background: transparent; color: inherit; font-size: 7.9pt; }
+  ul, ol { margin: 1.5mm 0 3mm; padding-left: 6mm; }
+  li { margin: 0 0 1.2mm; }
+  table {
+    width: 100%;
+    margin: 3mm 0 5mm;
+    border-collapse: collapse;
+    font-size: 8.15pt;
+    line-height: 1.35;
+    break-inside: avoid;
+  }
+  th, td { padding: 2mm 2.2mm; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { background: #eaf0ff; color: #253864; font-weight: 700; }
+  tr:nth-child(even) td { background: #f8f9fc; }
+  hr { margin: 6mm 0; border: 0; border-top: 1px solid var(--line); }
+  .article > p:last-child {
+    margin-top: 4mm;
+    padding: 4mm;
+    border: 1px solid #b9c8ec;
+    border-radius: 3mm;
+    background: #f0f4ff;
+    color: #24375f;
+    font-size: 10.5pt;
+    font-weight: 600;
+  }
+  @media print {
+    body { background: #fff; }
+    .screen-note { display: none; }
+    .document { width: auto; margin: 0; padding: 0; box-shadow: none; }
+    .cover { min-height: 250mm; }
+    @page { size: A4; }
+  }
+</style>
+</head>
+<body>
+  <div class="screen-note"><strong>Print-ready defence pack.</strong> The generated PDF is <code>DEFENCE.pdf</code>. Source: <code>DEFENCE.md</code>.</div>
+  <main class="document">
+    <section class="cover">
+      <p class="eyebrow">DataForge 2026 · Pathway Track · Final Presentation Round</p>
+      <h1>The synapse that never fills up</h1>
+      <p class="subtitle">Live defence & judge Q&amp;A playbook</p>
+      <div class="claim">A fixed-size synaptic weight matrix can process a sequence of unbounded duration without allocating a new slot per token—but retrieval degrades through interference between stored associations.</div>
+      <div class="meta-grid">
+        <div class="meta"><b>Round</b>12 September 2026 · 8:00 AM–6:00 PM IST</div>
+        <div class="meta"><b>Core demo</b>3 minutes + judge questions</div>
+        <div class="meta"><b>Verified seed</b>42 · deterministic stress case included</div>
+        <div class="meta"><b>Artifact</b>sujalmeena7.github.io/synapse-never-fills-up</div>
+      </div>
+      <p class="rule"><strong>Room rule:</strong> never guess a number. Predict, measure, then explain.</p>
+    </section>
+    <article class="article"><h2>1. What you must make the judges remember</h2>
+<h3>The precise central claim</h3>
+<blockquote>
+<p>A fixed-size synaptic weight matrix can process a sequence of unbounded
+duration without allocating a new slot per token—but retrieval degrades
+through interference between stored associations.</p>
+</blockquote>
+<p>This does <strong>not</strong> mean infinite perfect retention. “Unbounded duration” describes
+how long a sequence the recurrent update can process without growing the state.
+Capacity remains finite because crosstalk accumulates.</p>
+<h3>Your contribution in one sentence</h3>
+<blockquote>
+<p>We turned a frontier architectural mechanism into a visible, falsifiable
+learning experience: the learner can grow the sequence, inspect the fixed
+state, force recall failure, and see exactly which memories caused it.</p>
+</blockquote>
+<h3>Why this is more than a visualisation</h3>
+<ul>
+<li>The matrix, recall, crosstalk bars, decode scores, and curves are computed live.</li>
+<li>The learner changes real variables: write count, memory load, cue, key regime,
+and sparsity.</li>
+<li>Ground truth sits beside the memory’s estimate.</li>
+<li>A failure case is part of the lesson rather than hidden.</li>
+<li>BDH is woven into the mechanism; it is not a paragraph added at the end.</li>
+</ul>
+<hr>
+<h2>2. Three-minute presentation script</h2>
+<p>Use this if no presentation duration is provided. It leaves room for questions.</p>
+<h3>0:00–0:25 — Problem and claim</h3>
+<p><strong>Screen:</strong> hero.</p>
+<blockquote>
+<p>“Transformers remember earlier tokens using a KV cache that grows with the
+sequence. We ask whether working memory can instead live in fixed-size
+synaptic state. Our claim is precise: fixed state can process an
+unbounded-duration sequence without a per-token slot, but retrieval still
+degrades through interference.”</p>
+</blockquote>
+<h3>0:25–0:50 — Mechanism</h3>
+<p><strong>Screen:</strong> <em>This is a memory</em>.</p>
+<blockquote>
+<p>“Each association is written through a Hebbian outer product:
+<code>S ← λS + kvᵀ</code>. A cue reads the same matrix with <code>r = Sᵀq</code>. Scrubbing the
+writes changes every visible cell, but the matrix remains 32 by 32.”</p>
+</blockquote>
+<p>Move <strong>writes applied</strong> from 0 → 8. Point to <strong>1024 scalars · constant</strong>.</p>
+<h3>0:50–1:20 — Fixed state versus KV cache</h3>
+<p><strong>Screen:</strong> <em>Add more memories</em>.</p>
+<p>Move <strong>pairs stored</strong> from 8 → 64.</p>
+<blockquote>
+<p>“The fast-weight state remains 1024 scalars. The illustrative KV footprint
+grows from 512 to 4096. At short sequences the matrix can even be larger; the
+claim is not ‘always cheaper.’ The claim is that its state does not grow with
+sequence length.”</p>
+</blockquote>
+<h3>1:20–2:05 — Reveal the failure mechanism</h3>
+<p><strong>Screen:</strong> <em>Read one memory back</em> and <em>What did the memory actually say?</em></p>
+<p>At seed 42, set <strong>pairs stored = 24</strong>, cue <strong>ARIA → 0</strong>.</p>
+<blockquote>
+<p>“With six pairs the cue is recalled correctly. At 24 pairs, ARIA is a
+deterministic stress case: the expected digit is 0, but accumulated overlap
+makes the memory choose 3. Nothing was deleted. The green self-signal remains;
+the red bars are measured dot-product leakage from every other key.”</p>
+</blockquote>
+<p>Point to the expected answer and memory pick. This is your 60-second learning
+moment: <strong>failure through interference, not eviction</strong>.</p>
+<h3>2:05–2:40 — Connect to BDH</h3>
+<p><strong>Screen:</strong> <em>Where this lives in Dragon Hatchling</em>.</p>
+<p>Toggle <strong>dense signed → sparse non-negative</strong>, start at <strong>5% active</strong>, then show
+<strong>50% active</strong>.</p>
+<blockquote>
+<p>“BDH reports sparse, non-negative activation. Non-negativity removes sign
+cancellation, so collisions only add. Sparsity makes collisions rare enough
+to keep that viable. Our toy does not run a BDH checkpoint; it isolates and
+measures this mechanism. At 50% active our toy collapses, making the need for
+sparsity visible.”</p>
+</blockquote>
+<h3>2:40–3:00 — Limitation and close</h3>
+<blockquote>
+<p>“The limitation is equally important: this is temporary within-session state,
+not durable cross-session learning, and our keys are random rather than
+learned. The reusable contribution is a live substrate in which a learner can
+reproduce both the benefit and the failure of fixed-state synaptic memory in
+under a minute.”</p>
+</blockquote>
+<p>Stop. Do not keep scrolling. Invite questions.</p>
+<hr>
+<h2>3. If you receive five minutes</h2>
+<p>Use the same three-minute flow, then add:</p>
+<ol>
+<li><strong>30 s — derivation:</strong> show how the unnormalised attention sum reassociates.</li>
+<li><strong>30 s — prediction:</strong> ask a judge to predict what happens if <code>d_k</code> grows.</li>
+<li><strong>30 s — evidence:</strong> run <code>npm run verify</code> or show <code>EVIDENCE.md</code>.</li>
+<li><strong>30 s — recent landscape:</strong> BDH (2025), BDH-CQ (2026), and Gated DeltaNet
+(2024/ICLR 2025) demonstrate that recurrent matrix memory is an active
+direction, not a historical curiosity.</li>
+</ol>
+<p>If time is cut, omit the derivation—not the live failure or limitation.</p>
+<hr>
+<h2 class="major-break">4. Derive the mechanism correctly</h2>
+<h3>Start with softmax attention</h3>
+<pre><code class="language-text">out_t = Σ_i softmax(q_t · k_i) v_i
+</code></pre>
+<p>This requires access to previous keys and values. <strong>You cannot simply
+reassociate softmax attention into one matrix</strong> because its query-dependent
+normalisation couples the terms.</p>
+<h3>Change the mechanism to the unnormalised linear/fast-weight special case</h3>
+<pre><code class="language-text">out_t = Σ_{i≤t} (q_t · k_i) v_i
+      = (Σ_{i≤t} v_i k_iᵀ) q_t
+      = S_tᵀ q_t
+</code></pre>
+<p>The artifact writes <code>S</code> in <code>d_k × d_v</code> orientation:</p>
+<pre><code class="language-text">WRITE   S_t = λ S_{t-1} + k_t v_tᵀ
+READ    r_t = S_tᵀ q_t
+</code></pre>
+<p>This is a <strong>different attention mechanism</strong>, not an exact replacement preserving
+softmax outputs. Modern linear attention often uses feature maps and a
+normalising denominator; the artifact intentionally uses the simplest
+unnormalised associative case so every state variable remains visible.</p>
+<h3>Interference decomposition</h3>
+<p>For a cue equal to stored unit-norm key <code>k_j</code>:</p>
+<pre><code class="language-text">r = Sᵀ k_j
+  = v_j (k_j · k_j)                 signal = 1 · v_j
+  + Σ_{i≠j} v_i (k_i · k_j)         crosstalk
+</code></pre>
+<p>No slot fills up and no item is evicted. Recall fails when projected crosstalk
+changes the top-scoring value.</p>
+<h3>What “capacity” means in this toy</h3>
+<p>The toy decodes against a <strong>10-symbol value vocabulary</strong> and reports top-1
+symbol recall. It does not measure exact retrieval of an arbitrary unique vector
+for every item. The experiment teaches how key overlap affects associative
+class retrieval; it is not a universal capacity benchmark for BDH or all
+fast-weight memories.</p>
+<hr>
+<h2>5. Trace the code if a judge asks</h2>
+<pre><code class="language-text">index.html
+  └─ src/app.js          controls, corpus construction, canvas drawing
+       └─ src/engine.js  all memory mathematics; no DOM
+
+src/motion.js            cosmetic only: reveal, particles, spring counters
+vendor/motion.js         vendored Motion library; no runtime CDN dependency
+scripts/verify.mjs       deterministic acceptance tests at seed 42
+scripts/smoke.mjs        DOM, controls, and reveal regression test
+EVIDENCE.md              claim → acceptance test → result → limitation
+</code></pre>
+<h3>One interaction end-to-end</h3>
+<p>When <strong>pairs stored</strong> changes:</p>
+<ol>
+<li><code>app.js</code> reads the slider.</li>
+<li>It constructs deterministic keys/values from the displayed seed.</li>
+<li><code>engine.js</code> allocates <code>S</code> once and applies every outer-product write.</li>
+<li><code>engine.js</code> probes each cue and calculates recall/margins.</li>
+<li><code>app.js</code> draws the results and places ground truth beside the estimate.</li>
+<li><code>motion.js</code> only animates the number; it cannot alter the result.</li>
+</ol>
+<p>Deleting <code>motion.js</code> changes presentation, not mathematics.</p>
+<hr>
+<h2>6. Predict changes before touching the controls</h2>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Prediction</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pairs 8 → 64</td>
+<td>recall eventually falls; <code>S</code> stays fixed</td>
+<td>more crosstalk terms; one allocation</td>
+</tr>
+<tr>
+<td><code>d_k</code> 32 → 128</td>
+<td>average recall rises at fixed load</td>
+<td>random keys are closer to orthogonal in higher dimension</td>
+</tr>
+<tr>
+<td><code>λ</code> 1.0 → 0.9</td>
+<td>old pairs fade; recent pairs dominate</td>
+<td>earlier writes are geometrically down-weighted</td>
+</tr>
+<tr>
+<td>non-negative activity 5% → 50%</td>
+<td>recall falls sharply</td>
+<td>overlaps cannot cancel and become frequent</td>
+</tr>
+<tr>
+<td>new seed</td>
+<td>individual misses change; aggregate trend persists</td>
+<td>keys change, scaling pressure does not</td>
+</tr>
+<tr>
+<td>learned instead of random keys</td>
+<td>could improve capacity</td>
+<td>training can reduce harmful overlap, but this repo does not test it</td>
+</tr>
+</tbody>
+</table>
+<h3>The sparsity scaling argument—state it as a heuristic</h3>
+<p>For random unit-norm dense signed keys in <code>d</code> dimensions:</p>
+<pre><code class="language-text">E[k_i · k_j] ≈ 0
+E|k_i · k_j| ≈ √(2/π) / √d
+aggregate signed noise scales roughly as √(m/d)
+</code></pre>
+<p>For random sparse non-negative keys with <code>a</code> active units:</p>
+<pre><code class="language-text">E[k_i · k_j] ≈ a/d
+aggregate overlap scales roughly as m·a/d because signs cannot cancel
+</code></pre>
+<p>Equating the rough scales suggests <code>a ≈ √(d/m)</code> as an <strong>expected-interference
+crossover heuristic</strong>. It is not a theorem guaranteeing a particular recall
+rate. The verifier checks the overlap prediction empirically.</p>
+<hr>
+<h2 class="major-break">7. Verified numbers worth knowing</h2>
+<p>All are deterministic outputs of <code>npm run verify</code> at seed 42.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State size, <code>d_k=d_v=32</code></td>
+<td><strong>1024 scalars at every sequence length</strong></td>
+</tr>
+<tr>
+<td>KV footprint</td>
+<td><code>64m</code>; equals state at <strong>m=16</strong>, then keeps growing</td>
+</tr>
+<tr>
+<td>Dense recall vs load</td>
+<td>100% at <code>m≤12</code>; 99.5% at 16; 89.8% at 32; 77.4% at 48</td>
+</tr>
+<tr>
+<td>16-pair recall vs <code>d_k</code></td>
+<td>70.9% at 8; 91.4% at 16; 99.5% at 32; 100% at ≥64</td>
+</tr>
+<tr>
+<td>Dense, <code>d=256,m=16</code></td>
+<td>100% recall; margin 0.689</td>
+</tr>
+<tr>
+<td>Non-negative, 50% active</td>
+<td>47.0% recall; margin −0.033</td>
+</tr>
+<tr>
+<td>Non-negative, 5% active</td>
+<td>100% recall; margin 0.612</td>
+</tr>
+<tr>
+<td>Dense overlap</td>
+<td>measured 0.0508; predicted 0.0499</td>
+</tr>
+<tr>
+<td>Sparse overlap, <code>a=6</code></td>
+<td>measured 0.0226; predicted 0.0234</td>
+</tr>
+</tbody>
+</table>
+<p>Do not imply the fixed matrix is always smaller. At <code>m&lt;16</code> in this particular
+configuration, the illustrative KV footprint is smaller. The architectural
+advantage is asymptotic state growth, not universal superiority.</p>
+<hr>
+<h2>8. Likely judge questions</h2>
+<h3>“Is this just Mamba or another SSM?”</h3>
+<p>No. The artifact demonstrates a recurrent fast-weight matrix written by outer
+products. Mamba uses selective state-space dynamics. BDH-GPU is described using
+ReLU-low-rank transformations and linear attention; the challenge explicitly
+warns not to classify BDH as a Mamba-style SSM.</p>
+<h3>“Did you run or reproduce BDH?”</h3>
+<p>No. The challenge does not require an unavailable checkpoint. Our BDH module is
+grounded in published equations, reported architectural properties, and clearly
+labelled toy computation. All numbers generated by this repository describe the
+toy, not a Pathway checkpoint.</p>
+<h3>“Then what does this prove about BDH?”</h3>
+<p>It does not prove BDH’s benchmark performance. It makes one mechanism and design
+pressure testable: fixed recurrent association trades per-token storage for
+interference-limited retrieval; sparse non-negative codes alter that
+interference. BDH is the recent case study connecting the mechanism to a full
+architecture.</p>
+<h3>“Does sparse non-negative memory beat dense signed memory?”</h3>
+<p>Not universally, and not at the 5% setting in this random-key trial if margin is
+the metric: dense margin is 0.689 versus 0.612. The defensible result is that
+high-density non-negative codes perform badly because collisions never cancel;
+sparsity restores viability. That is narrower than “sparse always wins.”</p>
+<h3>“Why not include normalisation?”</h3>
+<p>Normalised kernel attention is important in production models, but it adds a
+second accumulated state and obscures the signal-plus-crosstalk equation. We
+chose the unnormalised special case because the education objective is to make
+interference directly visible. The limitation is stated; extending the same
+substrate with a normaliser is future work.</p>
+<h3>“Is the memory really unbounded?”</h3>
+<p>The <strong>input duration</strong> is unbounded with respect to state allocation; retention
+capacity is not. The matrix can accept another write without growing, but recall
+quality falls as associations interfere. That distinction is the central lesson.</p>
+<h3>“Why only ten values?”</h3>
+<p>A small fixed vocabulary keeps ground truth and competing answers visible. It
+measures top-1 symbol recall, not exact unique-vector capacity. A larger or
+unique-value experiment is a valid extension, not a result we claim here.</p>
+<h3>“What is live versus precomputed?”</h3>
+<p>Every matrix, curve, bar, decode, and numerical verdict is computed live from
+<code>engine.js</code>. Nothing scientific is precomputed. The neural particles and scroll
+reveals are cosmetic. Multi-seed curves are recomputed in-browser.</p>
+<h3>“How do we reproduce it?”</h3>
+<p><code>npm run verify</code> imports the same engine as the webpage and prints all quoted
+results. <code>npm run smoke</code> loads the real HTML, exercises controls, and asserts no
+reveal stays hidden. The artifact itself needs no installation or backend.</p>
+<h3>“Where is the recent research context?”</h3>
+<ul>
+<li><strong>BDH</strong> (2025): synaptic memory and sparse non-negative activation in a
+post-Transformer architecture.</li>
+<li><strong>BDH-CQ</strong> (2026): recurrent contextual memory and latent reasoning.</li>
+<li><strong>Gated DeltaNet</strong> (2024; ICLR 2025): independent gated delta-rule recurrent
+matrix memory addressing interference and retrieval.</li>
+<li><strong>Transformers are RNNs</strong> (2020): foundational background, explicitly outside
+the track’s required 2022–2026 window.</li>
+</ul>
+<h3>“What would you build next?”</h3>
+<ol>
+<li>Add normalised kernel attention as a side-by-side mechanism.</li>
+<li>Replace random keys with learned keys and compare overlap distributions.</li>
+<li>Add unique-value vector retrieval and capacity curves with confidence bands.</li>
+<li>Run a controlled learner study: explanation accuracy before versus after the
+60-second interaction.</li>
+</ol>
+<hr>
+<h2>9. Evidence labels and forbidden overclaims</h2>
+<p>Never say:</p>
+<ol>
+<li>BDH is a Mamba-style SSM.</li>
+<li>This toy is an official BDH model.</li>
+<li>The state perfectly remembers an infinite sequence.</li>
+<li>Sparse representations always beat dense representations.</li>
+<li>Within-session state is durable cross-session learning.</li>
+<li>Pathway-reported benchmarks are independent reproductions or deployments.</li>
+</ol>
+<p>If benchmark figures arise, say:</p>
+<blockquote>
+<p>“Pathway reports approximately 97.4% top-1 solve rate on its Sudoku Extreme
+evaluation and 29.5% pass@2 for BDH-CQ on the public ARC-AGI-1 evaluation set.
+We cite these as developer-reported benchmarks; this repository did not
+reproduce them.”</p>
+</blockquote>
+<hr>
+<h2 class="major-break">10. Day-of checklist</h2>
+<h3>The evening before</h3>
+<ul>
+<li>[ ] Read this document once; do not memorise every sentence.</li>
+<li>[ ] Rehearse the three-minute flow twice with a timer.</li>
+<li>[ ] Record the deterministic stress case: seed 42, load 24, ARIA → expected 0,
+memory pick 3.</li>
+<li>[ ] Run <code>npm run check</code>.</li>
+<li>[ ] Open the live artifact with <strong>Ctrl+F5</strong> and verify the precise “process a
+sequence of unbounded duration” wording.</li>
+<li>[ ] Keep a local server fallback ready: <code>npm run serve</code>.</li>
+<li>[ ] Download/offline-copy the repository and <code>DEFENCE.pdf</code>.</li>
+<li>[ ] Charge laptop, carry charger, mouse, HDMI/USB-C adapter, and hotspot.</li>
+</ul>
+<h3>Ten minutes before</h3>
+<ul>
+<li>[ ] Close notifications, mail, WhatsApp, and unrelated tabs.</li>
+<li>[ ] Set browser zoom to 110–125% if projected text is small.</li>
+<li>[ ] Open only: live artifact, repository <code>src/engine.js</code>, and terminal.</li>
+<li>[ ] Reset artifact seed to 42 and controls to defaults.</li>
+<li>[ ] Test screen sharing and audio if presenting virtually.</li>
+<li>[ ] Keep the local URL ready in a second tab.</li>
+</ul>
+<h3>During questions</h3>
+<ul>
+<li>Answer the question first, then explain.</li>
+<li>Distinguish “our measurement,” “paper-reported,” and “hypothesis.”</li>
+<li>Predict before moving a control.</li>
+<li>If uncertain: “I have not measured that; here is how I would test it.”</li>
+<li>Do not apologise for the toy—explain why visibility required simplification.</li>
+</ul>
+<hr>
+<h2>11. Emergency fallback</h2>
+<p>If the hosted page fails:</p>
+<pre><code class="language-powershell">npm run serve
+# open http://localhost:8123
+</code></pre>
+<p>If animation fails, the mathematics still works and the page force-reveals
+content. If the browser fails, run:</p>
+<pre><code class="language-powershell">npm run verify
+</code></pre>
+<p>Then explain the printed state-size, recall, dimension, sparsity, and overlap
+results. The numbers—not the motion effects—are the submission.</p>
+<h3>Ten-second closing</h3>
+<blockquote>
+<p>“Our contribution is not another claim that fixed-state memory is free. It is
+a substrate that lets a learner see both sides: constant allocation and
+interference-limited recall, connected honestly to BDH and the current
+fast-weight research landscape.”</p>
+</blockquote>
+</article>
+  </main>
+</body>
+</html>
