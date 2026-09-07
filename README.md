@@ -9,9 +9,17 @@ length without a per-token slot, and why it forgets through **interference**
 rather than eviction. The concept is the mechanism at the core of Pathway's
 **Dragon Hatchling (BDH)**, which reformulates attention as synaptic memory.
 
-- **Artifact:** open `index.html` (any static host, no build step, no sign-in).
-- **Reproduce every number:** `node scripts/verify.mjs`
-- **Engine (all the math):** [`src/engine.js`](src/engine.js)
+### Links
+
+| | |
+|---|---|
+| **Live artifact** (no sign-in) | **https://sujalmeena7.github.io/synapse-never-fills-up/** |
+| **One-page concept summary (PDF)** | [ONE_PAGE_SUMMARY.pdf](https://sujalmeena7.github.io/synapse-never-fills-up/ONE_PAGE_SUMMARY.pdf) |
+| **Source repository** | https://github.com/sujalmeena7/synapse-never-fills-up |
+| **Reproduce every number** | `npm run verify` |
+| **Engine (all the math)** | [`src/engine.js`](src/engine.js) |
+
+No build step, no sign-in, no runtime dependencies.
 
 ---
 
