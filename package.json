@@ -1,0 +1,21 @@
+{
+  "name": "synapse-never-fills-up",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive explainer: synaptic plasticity as short-term memory, connected to Pathway's Dragon Hatchling (BDH). DataForge 2026, Pathway Track.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "verify": "node scripts/verify.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "explore": "node scripts/explore-sparsity.mjs",
+    "pdf": "node scripts/make-summary-pdf.mjs",
+    "serve": "python -m http.server 8123",
+    "check": "npm run verify && npm run smoke"
+  },
+  "comment": "The ARTIFACT ITSELF HAS NO RUNTIME DEPENDENCIES. index.html loads only local files (src/*, vendor/motion.js). The packages below are development-only: jsdom powers the DOM smoke test, puppeteer renders the one-page summary to PDF. Neither is required to view or grade the artifact.",
+  "devDependencies": {
+    "jsdom": "30.0.1",
+    "puppeteer": "25.10.0"
+  }
+}

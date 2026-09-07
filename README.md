@@ -75,11 +75,14 @@ src/app.js           interaction layer: reads controls, calls engine, draws canv
 src/motion.js        presentation motion only: hero particle field, scroll reveal,
                      scroll-progress bar, animated slider fill, spring counters
 vendor/motion.js     Motion (motion@11.11.13) vendored locally — no runtime CDN dependency
+summary.html         print-optimised build of the one-page summary (source of the PDF)
+ONE_PAGE_SUMMARY.pdf the submitted concept summary — verified to render on ONE A4 page
+ONE_PAGE_SUMMARY.md  markdown source of the same summary text
+EVIDENCE.md          claim → acceptance test → command → result
 scripts/verify.mjs        reproduces every quoted number, deterministic at seed 42
-scripts/smoke.mjs         jsdom DOM smoke test: every element ID, initial render, all controls
+scripts/smoke.mjs         jsdom DOM smoke test: element IDs, initial render, controls, reveals
+scripts/make-summary-pdf.mjs   renders summary.html → ONE_PAGE_SUMMARY.pdf and reports page count
 scripts/explore-sparsity.mjs   scratch exploration behind the sparsity claim (not user-facing)
-ONE_PAGE_SUMMARY.md       the required concept summary (export to PDF for submission)
-EVIDENCE.md               claim → acceptance test → command → result
 ```
 
 **A note on the animation layer.** `src/motion.js` is strictly cosmetic —
@@ -146,16 +149,24 @@ instant value if the library ever fails to load.
 python -m http.server 8123    # then open http://localhost:8123
 # (or open index.html directly; it is a static ES-module page)
 
-# reproduce every number
-node scripts/verify.mjs
+# reproduce every number quoted in this README and in the artifact
+npm run verify
 
-# DOM smoke test (dev-only): checks every element ID, initial render, all controls
-npm i jsdom --no-save && node scripts/smoke.mjs
+# DOM + reveal regression test (element IDs, initial render, all controls)
+npm run smoke
+
+# both of the above
+npm run check
+
+# regenerate ONE_PAGE_SUMMARY.pdf from summary.html (verified to be 1 page)
+npm install && npm run pdf
 ```
 
-The artifact itself has **no runtime dependencies** (Motion is vendored). Node ≥
-18 runs the verifier via native ES modules; `jsdom` is a dev-only dependency for
-the smoke test and is not shipped with the artifact.
+The artifact itself has **no runtime dependencies** — `index.html` loads only
+local files (`src/*` and the vendored `vendor/motion.js`). The two packages in
+`devDependencies` are tooling only: `jsdom` for the smoke test and `puppeteer` to
+render the summary PDF. Neither is needed to view or grade the artifact. Node ≥
+18 runs the verifier via native ES modules.
 
 ## Primary sources (2022–2026)
 
