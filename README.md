@@ -4,10 +4,11 @@
 **Concept: Synaptic Plasticity as Short-Term Memory.**
 
 A learner-controllable substrate that makes one frontier idea click: how a
-fixed-size Hebbian synaptic-weight matrix stores a sequence of *unbounded*
-length without a per-token slot, and why it forgets through **interference**
-rather than eviction. The concept is the mechanism at the core of Pathway's
-**Dragon Hatchling (BDH)**, which reformulates attention as synaptic memory.
+fixed-size Hebbian synaptic-weight matrix processes a sequence of *unbounded
+duration* without allocating a per-token slot, and why retrieval degrades through
+**interference** rather than eviction. The concept is the mechanism at the core
+of Pathway's **Dragon Hatchling (BDH)**, which reformulates attention as synaptic
+memory.
 
 ### Links
 
@@ -26,9 +27,9 @@ No build step, no sign-in, no runtime dependencies.
 ## The one-sentence claim (falsifiable, written before any code)
 
 > A fixed-size synaptic weight matrix, written by co-activation and read by a
-> cue, can hold a sequence of unbounded length without allocating a slot per
-> token — and it forgets through **interference** between stored associations,
-> not by running out of room.
+> cue, can process a sequence of unbounded duration without allocating a slot
+> per token — yet retrieval degrades through **interference** between stored
+> associations, not by running out of room.
 
 The artifact lets a learner try to break this sentence: store more pairs, probe
 any cue, watch recall degrade while the state size stays pinned. If storing more

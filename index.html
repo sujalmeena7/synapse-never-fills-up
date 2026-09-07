@@ -6,7 +6,7 @@
     <title>The Synapse That Never Fills Up — an interactive explainer</title>
     <meta
       name="description"
-      content="A learner-controllable substrate showing how a fixed-size Hebbian synaptic memory stores an unbounded sequence and forgets through interference, not eviction. Connected to Pathway's Dragon Hatchling (BDH)."
+      content="A learner-controllable substrate showing how fixed-size Hebbian synaptic memory processes an unbounded-duration sequence without per-token allocation, yet retrieval degrades through interference rather than eviction. Connected to Pathway's Dragon Hatchling (BDH)."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,9 +36,9 @@
           The synapse that <span class="grad">never fills up</span>
         </h1>
         <p class="claim" id="one-sentence-claim" data-reveal data-reveal-delay="2">
-          A fixed-size synaptic weight matrix, written by co-activation and read by a cue, can hold a
-          sequence of unbounded length without allocating a slot per token — and it forgets through
-          <em>interference</em> between stored associations, not by running out of room.
+          A fixed-size synaptic weight matrix, written by co-activation and read by a cue, can
+          process a sequence of unbounded duration without allocating a slot per token — yet retrieval
+          degrades through <em>interference</em> between stored associations, not by running out of room.
         </p>
         <p class="subclaim" data-reveal data-reveal-delay="3">
           Everything below is computed live in your browser from the equations, at a seed you control.
@@ -96,7 +96,7 @@
       <!-- STEP 1: the core claim — constant footprint -->
       <section class="step alt" id="step-footprint" data-step="1">
         <div class="step-body">
-          <span class="step-tag" data-reveal>Claim 1 · unbounded sequence, fixed state</span>
+          <span class="step-tag" data-reveal>Claim 1 · unbounded-duration input, fixed state</span>
           <h2 data-reveal data-reveal-delay="1">Add more memories. The state does not grow.</h2>
           <p>
             A Transformer answers a query by comparing it against a stored key for
