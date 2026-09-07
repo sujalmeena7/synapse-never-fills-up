@@ -1,0 +1,10 @@
+node_modules/
+package-lock.json
+*.log
+.DS_Store
+.vscode/
+# problem-statement PDFs and their extracted text are reference only
+Pathway PS.pdf
+Rime PS.pdf
+Pathway PS.txt
+Rime PS.txt

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synaptic Plasticity as Short-Term Memory — one-page concept summary</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Print-first stylesheet. Open this page and use Print → Save as PDF.
+         Two-column body keeps the ~690-word briefing to a single sheet. */
+      :root {
+        --ink: #11151c;
+        --dim: #4a5464;
+        --rule: #c8d0dc;
+        --accent: #1c4fd8;
+        --sans: "Inter", -apple-system, system-ui, "Segoe UI", sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #eef1f6;
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 10pt;
+        line-height: 1.45;
+      }
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 12mm auto;
+        padding: 14mm 15mm 12mm;
+        background: #fff;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+      }
+      .screen-note {
+        max-width: 210mm;
+        margin: 14mm auto -6mm;
+        padding: 0.7rem 1rem;
+        background: #dce6ff;
+        border: 1px solid #9fb8f5;
+        border-radius: 8px;
+        font-size: 9.5pt;
+        color: #1a3a8f;
+      }
+      header { border-bottom: 2px solid var(--ink); padding-bottom: 3mm; margin-bottom: 4mm; }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 7.5pt;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin: 0 0 1.5mm;
+      }
+      h1 { font-size: 17pt; line-height: 1.15; margin: 0 0 1.5mm; letter-spacing: -0.02em; }
+      .byline { font-size: 8.5pt; color: var(--dim); margin: 0; }
+      .body { column-count: 2; column-gap: 7mm; text-align: justify; hyphens: auto; }
+      h2 {
+        font-size: 10pt;
+        margin: 0 0 1mm;
+        color: var(--accent);
+        break-after: avoid;
+      }
+      section { margin-bottom: 3.5mm; break-inside: avoid-column; }
+      p { margin: 0 0 2mm; }
+      code { font-family: var(--mono); font-size: 8.5pt; background: #f1f4f9; padding: 0 0.6mm; border-radius: 2px; }
+      strong { font-weight: 700; }
+      .full { column-span: all; margin: 2mm 0 3mm; }
+      table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+      caption {
+        caption-side: top;
+        text-align: left;
+        font-size: 8pt;
+        font-weight: 600;
+        color: var(--accent);
+        padding-bottom: 1mm;
+      }
+      th, td { border: 1px solid var(--rule); padding: 1.2mm 1.8mm; text-align: left; vertical-align: top; }
+      th { background: #f1f4f9; font-weight: 600; }
+      .fixed { color: #0a7d52; font-weight: 600; }
+      footer {
+        column-span: all;
+        border-top: 1px solid var(--rule);
+        margin-top: 2mm;
+        padding-top: 2mm;
+        font-size: 7.5pt;
+        color: var(--dim);
+      }
+      footer p { margin: 0 0 1mm; }
+      a { color: var(--accent); text-decoration: none; }
+
+      @media print {
+        body { background: #fff; font-size: 9.5pt; }
+        .screen-note { display: none; }
+        .sheet { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+        @page { size: A4; margin: 13mm 14mm; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screen-note">
+      <strong>To export:</strong> press <b>Ctrl/Cmd + P</b> → Destination “Save as PDF” → A4 →
+      make sure “Background graphics” is <b>on</b> → Save as <code>ONE_PAGE_SUMMARY.pdf</code>.
+      This banner is hidden in the PDF.
+    </div>
+
+    <div class="sheet">
+      <header>
+        <p class="eyebrow">DataForge 2026 · Pathway Track · One-page concept summary</p>
+        <h1>Synaptic Plasticity as Short-Term Memory</h1>
+        <p class="byline">
+          Companion to the interactive explainer <em>“The synapse that never fills up”</em> ·
+          audience: a data scientist meeting this concept for the first time
+        </p>
+      </header>
+
+      <div class="body">
+        <section>
+          <h2>The concept, and why it is timely</h2>
+          <p>
+            Softmax attention answers a query by comparing it against a stored key–value pair for
+            every prior token. That store — the KV cache — grows linearly with sequence length and is
+            the dominant memory and latency cost of long-context Transformers.
+            <strong>Synaptic plasticity as short-term memory</strong> is the alternative recurring
+            across recent architectures: instead of keeping every token, write each association into a
+            <em>single fixed-size weight matrix</em> using a Hebbian rule — units that co-activate
+            strengthen their connection — and read it back with a cue. Memory becomes a property of
+            the wiring, updated as the model reads, rather than a growing list of past states.
+          </p>
+        </section>
+
+        <section>
+          <h2>The mechanism, precisely</h2>
+          <p>
+            Remove the softmax and the attention sum reassociates:
+            <code>outₜ = Σ(qₜ·kᵢ)vᵢ = qₜᵀ(Σ kᵢvᵢᵀ) = qₜᵀS</code>. The state <code>S</code> is a fixed
+            <code>d_k×d_v</code> matrix with a recurrent update — <strong>write</strong>
+            <code>S ← λS + kvᵀ</code> (a Hebbian outer product), <strong>read</strong>
+            <code>r = Sᵀq</code>. This is the <em>fast-weight</em> / <em>linear-attention</em> view of
+            associative memory.
+          </p>
+          <p>
+            The technical change from a Transformer: state size is decoupled from sequence length. The
+            trade-off: reading a cue <code>kⱼ</code> yields
+            <code>vⱼ(kⱼ·kⱼ) + Σ_{i≠j} vᵢ(kᵢ·kⱼ)</code> — the intended value plus
+            <strong>crosstalk</strong> from every other memory overlapping the cue. Nothing is
+            evicted; recall fails when accumulated crosstalk outgrows the signal. Capacity is set by
+            <code>d_k</code> and by how near-orthogonal the keys are, <strong>not</strong> by a slot
+            count.
+          </p>
+        </section>
+
+        <section>
+          <h2>Where BDH and BDH-CQ fit</h2>
+          <p>
+            <strong>Dragon Hatchling (BDH)</strong> [1] makes this the architecture rather than an
+            add-on: attention is reformulated as synaptic memory over a scale-free network of locally
+            interacting neurons, so reasoning and memory share one computational fabric. Its GPU form,
+            BDH-GPU, is built from ReLU-low-rank transformations with linear attention — importantly
+            <em>not</em> a Mamba-style SSM. Two reported properties bear directly on the mechanism
+            above: roughly <strong>5% of neurons are active</strong>, and activations are
+            <strong>non-negative</strong>. Non-negativity removes sign cancellation, so crosstalk that
+            averaged out for signed keys now always adds; sparsity is what keeps that linear growth
+            survivable.
+          </p>
+          <p>
+            <strong>BDH-CQ</strong> [2] is a later family member for in-context reasoning; it relates
+            its contextual memory to the same fast-weight / linear-attention view of association, with
+            a special case where state accumulates additively per demonstration. BDH's role here is
+            central; BDH-CQ's is a supporting reference, and we do not inflate it.
+          </p>
+        </section>
+
+        <div class="full">
+          <table>
+            <caption>Positioning: how the fixed-state view compares on what actually matters</caption>
+            <thead>
+              <tr>
+                <th>Approach</th>
+                <th>State vs. length</th>
+                <th>Interference</th>
+                <th>Interpretability</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Softmax Transformer (KV cache)</td>
+                <td>grows linearly</td>
+                <td>none (exact recall)</td>
+                <td>low</td>
+                <td>strong recall, costly at length</td>
+              </tr>
+              <tr>
+                <td>Linear attention / fast weights [3]</td>
+                <td class="fixed">fixed</td>
+                <td>crosstalk-limited</td>
+                <td>medium</td>
+                <td>the substrate our artifact builds</td>
+              </tr>
+              <tr>
+                <td>State-space models (Mamba)</td>
+                <td class="fixed">fixed</td>
+                <td>selective decay</td>
+                <td>medium</td>
+                <td>gated, not Hebbian; BDH is not this</td>
+              </tr>
+              <tr>
+                <td><strong>BDH / BDH-CQ</strong> [1,2]</td>
+                <td class="fixed">fixed, synaptic</td>
+                <td>sparsity-mitigated</td>
+                <td>high (monosemantic synapses reported)</td>
+                <td>reasoning + memory unified</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <section>
+          <h2>Evidence, correctly labelled</h2>
+          <p>
+            Our interactive artifact <em>demonstrates the mechanism</em> on a toy associative memory
+            with random keys, and every number is reproducible
+            (<code>node scripts/verify.mjs</code>, seed 42): state stays constant while the KV cache
+            grows; recall decays smoothly with load (100%→77% from 2→48 pairs at <code>d_k=32</code>);
+            measured key-overlap matches theory (dense ≈ √(2/π)/√d_k; sparse ≈ a/d_k).
+          </p>
+          <p>
+            We did <strong>not</strong> run any BDH checkpoint. Pathway's headline results — BDH's
+            ~97.4% solve rate on Sudoku Extreme without chain-of-thought, and BDH-CQ's 29.5% pass@2 on
+            public ARC-AGI-1 at ~$0.0007/task — are <strong>developer-reported benchmarks</strong>
+            cited from primary sources, not independent reproductions or deployments. BDH's
+            pretraining-scaling from 1B toward 600B parameters is an early reported experiment.
+          </p>
+        </section>
+
+        <section>
+          <h2>Strengths, and the most important limitation</h2>
+          <p>
+            The fixed-state view buys constant memory and cheap updates, and — in BDH's case — an
+            interpretable substrate where synapses can encode identifiable concepts. The honest
+            limitation: <strong>within-session synaptic memory is not durable cross-session
+            learning.</strong> The matrix resets when context ends; consolidating useful fast state
+            into slow trained weights is an open problem BDH frames rather than solves. The open
+            question worth watching is whether learned sparse synaptic codes keep crosstalk manageable
+            at production scale, where our random-key substrate is deliberately pessimistic.
+          </p>
+        </section>
+
+        <footer>
+          <p>
+            <strong>Primary sources.</strong>
+            [1] Kosowski et al., <em>The Dragon Hatchling: The Missing Link between the Transformer and
+            Models of the Brain</em>, arXiv:2509.26507 (2025).
+            [2] Pathway, <em>BDH-CQ: In-Context Learning with Recurrent Latent Reasoning</em>,
+            arXiv:2608.09888 (2026).
+            [3] Katharopoulos et al., <em>Transformers are RNNs: Fast Autoregressive Transformers with
+            Linear Attention</em>, arXiv:2006.16236 (2020).
+          </p>
+          <p>
+            AI assistance was used for drafting; every sentence, number, and citation is defensible and
+            reproducible via <code>scripts/verify.mjs</code>. Artifact and full disclosure in the
+            repository README.
+          </p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

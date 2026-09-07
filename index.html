@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Synapse That Never Fills Up — an interactive explainer</title>
+    <meta
+      name="description"
+      content="A learner-controllable substrate showing how a fixed-size Hebbian synaptic memory stores an unbounded sequence and forgets through interference, not eviction. Connected to Pathway's Dragon Hatchling (BDH)."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/styles.css" />
+    <noscript>
+      <style>
+        [data-reveal] { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="aurora" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <canvas id="hero-net" class="hero-net" aria-hidden="true"></canvas>
+      <div class="masthead-inner">
+        <p class="kicker" data-reveal>
+          <span class="kicker-dot"></span>
+          DataForge 2026 · Pathway Track · Synaptic Plasticity as Short-Term Memory
+        </p>
+        <h1 data-reveal data-reveal-delay="1">
+          The synapse that <span class="grad">never fills up</span>
+        </h1>
+        <p class="claim" id="one-sentence-claim" data-reveal data-reveal-delay="2">
+          A fixed-size synaptic weight matrix, written by co-activation and read by a cue, can hold a
+          sequence of unbounded length without allocating a slot per token — and it forgets through
+          <em>interference</em> between stored associations, not by running out of room.
+        </p>
+        <p class="subclaim" data-reveal data-reveal-delay="3">
+          Everything below is computed live in your browser from the equations, at a seed you control.
+          Nothing here is animated or pre-scripted. <a href="#honesty">What's live vs precomputed →</a>
+        </p>
+        <div class="scroll-cue" data-reveal data-reveal-delay="4" aria-hidden="true">
+          <span>scroll</span>
+          <span class="scroll-cue-line"></span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- STEP 0: preset already running, per design standard "skip the blank canvas" -->
+      <section class="step" id="step-substrate" data-step="0">
+        <div class="step-body">
+          <span class="step-tag" data-reveal>The substrate</span>
+          <h2 data-reveal data-reveal-delay="1">This is a memory. It is already remembering.</h2>
+          <p>
+            On the right is a single <strong>synaptic weight matrix</strong> <code>S</code>, sized
+            <code id="dims-inline">32 × 32</code>. It started empty. We streamed a short sequence of
+            <em>(name → digit)</em> pairs into it. Each pair was written with one rule — the same rule
+            a Hebbian synapse follows: <em>units that fire together wire together</em>.
+          </p>
+          <div class="equation" aria-label="write rule">
+            <span class="eq-label">write</span>
+            <code>S ← λ·S + k·vᵀ</code>
+            <span class="eq-note">outer product of key <code>k</code> and value <code>v</code></span>
+          </div>
+          <div class="equation" aria-label="read rule">
+            <span class="eq-label">read</span>
+            <code>r = Sᵀq</code>
+            <span class="eq-note">probe the matrix with a cue <code>q</code></span>
+          </div>
+          <p>
+            The grid never changes shape. It is the same size whether you store one pair or a
+            thousand. Watch it fill with structure as you scrub through the writes.
+          </p>
+        </div>
+        <div class="step-viz" data-reveal data-reveal-dir="right">
+          <div class="matrix-panel">
+            <div class="panel-head">
+              <span>synaptic state <code>S</code></span>
+              <span class="footprint-badge" id="footprint-badge">1024 scalars · constant</span>
+            </div>
+            <canvas id="matrix-canvas" width="360" height="360" aria-label="synaptic weight matrix heatmap"></canvas>
+            <div class="scrubber">
+              <label for="write-scrub">writes applied: <output id="write-count">0</output></label>
+              <input type="range" id="write-scrub" min="0" max="8" value="0" step="1" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 1: the core claim — constant footprint -->
+      <section class="step alt" id="step-footprint" data-step="1">
+        <div class="step-body">
+          <span class="step-tag" data-reveal>Claim 1 · unbounded sequence, fixed state</span>
+          <h2 data-reveal data-reveal-delay="1">Add more memories. The state does not grow.</h2>
+          <p>
+            A Transformer answers a query by comparing it against a stored key for
+            <em>every previous token</em>. That store — the KV cache — grows with the sequence. Drop
+            the softmax and the sum reassociates into a single fixed matrix
+            <code>S = Σ kᵢvᵢᵀ</code>. That is the linear-attention / fast-weight view.
+          </p>
+          <p>
+            Drag the slider. Store 2 pairs, or 200. Compare the two footprints.
+          </p>
+          <div class="control-row">
+            <label for="npairs">pairs stored</label>
+            <input type="range" id="npairs" min="2" max="200" value="8" step="1" />
+            <output id="npairs-out">8</output>
+          </div>
+          <div class="readout-grid">
+            <div class="readout">
+              <span class="readout-label">fast-weight state <code>d_k·d_v</code></span>
+              <span class="readout-value" id="ro-state">1024</span>
+              <span class="readout-sub">scalars — constant</span>
+            </div>
+            <div class="readout">
+              <span class="readout-label">KV cache <code>m·(d_k+d_v)</code></span>
+              <span class="readout-value" id="ro-kv">512</span>
+              <span class="readout-sub">scalars — grows</span>
+            </div>
+          </div>
+          <p class="insight" id="footprint-insight" role="status" aria-live="polite"></p>
+        </div>
+        <div class="step-viz" data-reveal data-reveal-dir="left">
+          <div class="bars-panel">
+            <div class="panel-head"><span>memory footprint · fixed vs growing</span></div>
+            <canvas id="footprint-canvas" width="380" height="300" aria-label="state size vs KV cache size as pairs increase"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: it forgets, and here's exactly why -->
+      <section class="step" id="step-interference" data-step="2">
+        <div class="step-body">
+          <span class="step-tag" data-reveal>Claim 2 · it forgets, but not by deleting</span>
+          <h2 data-reveal data-reveal-delay="1">Read one memory back. See what leaks in.</h2>
+          <p>
+            Nothing is ever erased. So why does recall fail as you store more? Probe <code>S</code>
+            with a stored key <code>kⱼ</code> and the read decomposes exactly:
+          </p>
+          <div class="equation big" aria-label="crosstalk decomposition">
+            <code>r = v<sub>j</sub>(k<sub>j</sub>·k<sub>j</sub>) + <span class="crosstalk">Σ<sub>i≠j</sub> v<sub>i</sub>(k<sub>i</sub>·k<sub>j</sub>)</span></code>
+          </div>
+          <p>
+            The first term is the answer you want. The <span class="crosstalk-text">highlighted sum</span>
+            is <strong>crosstalk</strong> — every other memory leaking in, weighted by how much its key
+            overlaps your cue. Pick a cue and a store size and watch the two compete.
+          </p>
+          <div class="control-row">
+            <label for="cue-select">cue</label>
+            <select id="cue-select"></select>
+            <label for="load-slider" style="margin-left:1rem">pairs stored</label>
+            <input type="range" id="load-slider" min="2" max="40" value="6" step="1" />
+            <output id="load-out">6</output>
+          </div>
+          <div class="verdict" id="recall-verdict" role="status" aria-live="polite"></div>
+        </div>
+        <div class="step-viz" data-reveal data-reveal-dir="right">
+          <div class="bars-panel">
+            <div class="panel-head"><span>read contribution per stored memory</span></div>
+            <canvas id="interference-canvas" width="380" height="340" aria-label="signal versus crosstalk contributions"></canvas>
+            <div class="legend">
+              <span><i class="swatch signal"></i> signal (your cue)</span>
+              <span><i class="swatch noise"></i> crosstalk (everything else)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: truth beside estimate -->
+      <section class="step alt" id="step-decode" data-step="3">
+        <div class="step-body">
+          <span class="step-tag" data-reveal>Claim 2 (cont.) · truth beside estimate</span>
+          <h2 data-reveal data-reveal-delay="1">What did the memory actually say?</h2>
+          <p>
+            The read vector <code>r</code> is scored against every possible answer. The bar the memory
+            picks sits next to the answer it <em>should</em> have given. When the store is small they
+            agree. Push the load up and watch the margin close, then flip.
+          </p>
+          <p class="insight" id="decode-insight" role="status" aria-live="polite"></p>
+        </div>
+        <div class="step-viz" data-reveal data-reveal-dir="left">
+          <div class="bars-panel">
+            <div class="panel-head">
+              <span>decode scores · <span class="truth-tag">expected: <b id="expected-symbol">–</b></span></span>
+            </div>
+            <canvas id="decode-canvas" width="380" height="300" aria-label="decode similarity scores for each candidate answer"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4: the BDH module — woven in, with its own objective -->
+      <section class="step bdh" id="step-bdh" data-step="4">
+        <div class="step-body">
+          <span class="step-tag bdh-tag" data-reveal>The BDH connection</span>
+          <h2 data-reveal data-reveal-delay="1">Where this lives in Dragon Hatchling</h2>
+          <p>
+            Everything above is the mechanism at the heart of
+            <a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">Pathway's Dragon
+            Hatchling (BDH)</a>. BDH reformulates attention as <strong>synaptic memory</strong>: the
+            fast weight <code>S</code> is not a cache bolted on beside the model — it <em>is</em> the
+            model's working memory, updated as it reads. BDH-CQ relates its contextual memory to this
+            same fast-weight / linear-attention view of association.
+          </p>
+          <p>
+            One BDH detail changes the picture here, and you can test it. BDH reports roughly
+            <strong>5% of neurons active</strong>, and those activations are <strong>non-negative</strong>
+            (ReLU). Non-negativity removes sign cancellation, so crosstalk that used to average out now
+            always adds. Sparsity is what keeps that survivable. Flip the key regime and measure it.
+          </p>
+          <div class="control-row">
+            <span class="toggle-label">key regime</span>
+            <div class="toggle" role="tablist">
+              <button id="regime-dense" class="active" role="tab">dense (signed)</button>
+              <button id="regime-sparse" role="tab">sparse non-negative</button>
+            </div>
+          </div>
+          <div class="control-row" id="sparsity-row">
+            <label for="sparsity">% units active</label>
+            <input type="range" id="sparsity" min="1" max="50" value="5" step="1" />
+            <output id="sparsity-out">5%</output>
+          </div>
+          <div class="verdict" id="bdh-verdict" role="status" aria-live="polite"></div>
+          <p class="caveat">
+            <strong>Honesty note.</strong> This is a toy associative memory with <em>random</em> keys,
+            not a BDH checkpoint. BDH <em>learns</em> its keys, so real learned sparse codes are closer
+            to orthogonal and store more than random ones do here. This substrate demonstrates the
+            <em>mechanism</em> and its scaling law; it does not measure any Pathway model. No BDH
+            checkpoint was run for anything on this page.
+          </p>
+        </div>
+        <div class="step-viz" data-reveal data-reveal-dir="right">
+          <div class="bars-panel">
+            <div class="panel-head"><span>recall vs load · dense vs sparse non-negative</span></div>
+            <canvas id="regime-canvas" width="380" height="320" aria-label="recall curves comparing dense and sparse key regimes"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 5: explain it back -->
+      <section class="step" id="step-recap" data-step="5">
+        <div class="step-body wide" data-reveal>
+          <span class="step-tag">Say it back</span>
+          <h2>In one breath</h2>
+          <p class="recap">
+            A synapse-style memory writes each association as an outer product into one fixed matrix,
+            so a sequence of any length costs the same state. Reading it back is a weighted vote: the
+            cue's own memory versus the crosstalk of every other memory that overlaps it. It never runs
+            out of slots — it <em>degrades</em> as overlap accumulates. Sparse, non-negative codes keep
+            that overlap small, which is why BDH can turn attention into synaptic memory and still
+            reason.
+          </p>
+          <div class="misconception">
+            <h3>One thing not to walk away believing</h3>
+            <p>
+              Within-session synaptic memory is <strong>not</strong> the same as durable, cross-session
+              learning. This matrix resets when the context ends. Consolidating useful fast state into
+              slow trained weights is an open problem BDH explicitly frames — not something this
+              mechanism solves on its own.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="step-footer" id="honesty">
+        <h3>What's live, what's precomputed, what's a limit</h3>
+        <ul>
+          <li><b>Live:</b> every matrix, bar, curve, and number on this page is computed in your browser from <code>src/engine.js</code> at the seed shown. Change a control, the math reruns.</li>
+          <li><b>Precomputed:</b> nothing. The recall-vs-load curves average a handful of seeds on the fly; on a slow device they may take a beat.</li>
+          <li><b>Stated limits:</b> <code>d_k</code>, <code>d_v</code> and store sizes are capped small so state stays visible. Keys are random, not learned. The BDH connection is at the level of mechanism and published equations, not a reproduction.</li>
+          <li><b>Reproduce the numbers:</b> <code>node scripts/verify.mjs</code> prints every figure this page and the README rely on, deterministically at seed 42.</li>
+        </ul>
+        <p class="seed-line">seed: <output id="seed-display">42</output> · <button id="reseed">new seed</button></p>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>
+        Primary sources:
+        <a href="https://arxiv.org/abs/2509.26507" target="_blank" rel="noopener">Dragon Hatchling (BDH), arXiv:2509.26507</a> ·
+        <a href="https://arxiv.org/abs/2608.09888" target="_blank" rel="noopener">BDH-CQ, arXiv:2608.09888</a> ·
+        <a href="https://github.com/pathwaycom/bdh" target="_blank" rel="noopener">official toy BDH implementation</a>.
+        Full citations, evidence labels, and AI-assistance disclosure in the README.
+      </p>
+    </footer>
+
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
